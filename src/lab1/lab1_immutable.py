@@ -1,9 +1,16 @@
 # coding=utf-8
+'''
+Author: Zhou Guancheng
+Date: 03-05-2020
+Title: A Immutable Binary Tree
+'''
+import math
+
 
 class Node(object):
-    """节点类"""
+    """Node class, the basic structure of a Tree"""
 
-    def __init__(self, elem=-1, lchild=None, rchild=None):
+    def __init__(self, elem=None, lchild=None, rchild=None):
         self.elem = elem
         self.lchild = lchild
         self.rchild = rchild
@@ -13,17 +20,22 @@ class Node(object):
 
 
 class Tree(object):
-    """树类"""
+    """Tree"""
 
-    def __init__(self, root=Node()):
+    '''Initial the Tree'''
+
+    def __init__(self, root=Node(None)):
         self.root = root
+
+    '''Add a Node to Tree'''
 
     def addNode(self, elem):
         myQueue = []
         new_node = Node(elem)
         # 如果树是空的，则对根节点赋值
-        if self.root.elem == -1:
+        if self.root.elem is None:
             self.root = new_node
+            return
         # 如果树不是空的，则使用层次遍历添加节点
         myQueue.append(self.root)
         while myQueue:
@@ -34,60 +46,38 @@ class Tree(object):
             elif tree_node.rchild is None:
                 tree_node.rchild = new_node
                 return
-            elif tree_node.lchild is not None:
-                myQueue.append(node.lchild)
-            elif tree_node.rchild is not None:
-                myQueue.append(node.rchild)
+            if tree_node.lchild is not None:
+                myQueue.append(tree_node.lchild)
+            if tree_node.rchild is not None:
+                myQueue.append(tree_node.rchild)
+
+    '''Output the size of tree'''
 
     def size(self):
         return len(self.level_queue(self.root))
 
-    def front_digui(self, root):
-        """利用递归实现树的先序遍历"""
-        if root == None:
-            return []
-        print(root.elem)
-        self.front_digui(root.lchild)
-        self.front_digui(root.rchild)
+    '''remove the given leaf of tree'''
 
-    def front_search(self, root):
-        """利用递归实现树的先序遍历"""
-        if root == None:
-            return []
-        print(root.elem)
-        self.front_digui(root.lchild)
-        self.front_digui(root.rchild)
-
-    def front_digui(self, root):
-        """利用递归实现树的先序遍历"""
-        if root == None:
-            return []
-        print(root.elem)
-        self.front_digui(root.lchild)
-        self.front_digui(root.rchild)
-
-    def remove_leaf(self, root, elem):
-        if root == None:
+    def remove_leaf(self, elem):
+        if self.root is None:
             return
         myQueue = []
-        result = []
-        node = root
+        node = self.root
         if node.elem == elem and (node.lchild is not None or node.lchild is not None):
             print("the element you choose is not the leaf")
             return
         myQueue.append(node)
-        result.append(node)
         while myQueue:
             node = myQueue.pop(0)
             left = node.lchild
             right = node.rchild
-            if (left is not None and left.elem == elem and (node.lchild.lchild is None
-                                                            and node.lchild.rchild is None)):
-                left = None
+            if (left is not None and left.elem == elem and (left.lchild is None
+                                                            and left.rchild is None)):
+                node.lchild = None
                 return
-            elif (right is not None and right.elem == elem and (node.rchild.lchild is None
-                                                                and node.rchild.rchild is None)):
-                right = None
+            elif (right is not None and right.elem == elem and (right.lchild is None
+                                                                and right.rchild is None)):
+                node.rchild = None
                 return
             elif left is not None and left.elem == elem and (left.lchild is not None
                                                              or left.rchild is not None):
@@ -97,32 +87,107 @@ class Tree(object):
                                                                or right.rchild is not None):
                 print("the element you choose is not the leaf")
                 return
+            if left is not None:
+                myQueue.append(node.lchild)
+            if right is not None:
+                myQueue.append(node.rchild)
+        print("we can not find the elem")
+
+    '''Convert all the nodes of Tree to a list'''
+
+    def to_list(self):
+        if self.root.elem is None:
+            return
+        lst = []
+        result = self.level_queue(self.root)
+        for e in result:
+            if e.elem is not None:
+                lst.append(e.elem)
+        return lst
+
+    '''Convert all the element of List to a Tree'''
+
+    def from_list(self, lst):
+        # if it is not an Empty Tree, Clear the whole tree
+        if self.root.elem is not None:
+            self.root = None
+        self.root = Node()
+        for e in lst:
+            self.addNode(e)
+
+    '''Implement a Function on all the nodes of Tree'''
+
+    def map(self, f):
+        nodes = self.level_queue(self.root)
+        for e in nodes:
+            e.elem = f(e.elem)
+
+    '''Find the Elements which fit the function'''
+
+    def findElem(self, f):
+        lst = self.to_list()
+        for e in lst:
+            if not f(e):
+                lst.remove(e)
+        return lst
+
+    '''Search the elements of Tree level by level'''
+
+    def level_queue(self, root):
+        """利用队列实现树的层次遍历"""
+        if root.elem is None:
+            return
+        myQueue = []
+        result = []
+        node = root
+        myQueue.append(node)
+        result.append(node)
+        while myQueue:
+            node = myQueue.pop(0)
+            # print(node.elem)
             if node.lchild is not None:
                 myQueue.append(node.lchild)
                 result.append(node.lchild)
             if node.rchild is not None:
                 myQueue.append(node.rchild)
-                result.append(node.lchild)
+                result.append(node.rchild)
+        return result
 
-    def middle_digui(self, root):
+    def findMax(self):
+        lst = self.front_stack(self.root)
+        return max(lst)
+
+    def findMin(self):
+        lst = self.front_stack(self.root)
+        return min(lst)
+
+    def pre_order_search(self, root):
+        """利用递归实现树的先序遍历"""
+        if root is None:
+            return []
+        print(root.elem)
+        self.front_digui(root.lchild)
+        self.front_digui(root.rchild)
+
+    def in_order_search(self, root):
         """利用递归实现树的中序遍历"""
-        if root == None:
+        if root is None:
             return
         self.middle_digui(root.lchild)
         print(root.elem)
         self.middle_digui(root.rchild)
 
-    def later_digui(self, root):
+    def post_order_search(self, root):
         """利用递归实现树的后序遍历"""
-        if root == None:
+        if root is None:
             return
         self.later_digui(root.lchild)
         self.later_digui(root.rchild)
         print(root.elem)
 
-    def front_stack(self, root):
+    def pre_order_search_stack(self, root):
         """利用堆栈实现树的先序遍历"""
-        if root == None:
+        if root is None:
             return
         myStack = []
         all_nodes = []
@@ -137,9 +202,9 @@ class Tree(object):
             node = node.rchild  # 开始查看它的右子树
         return all_nodes
 
-    def middle_stack(self, root):
+    def in_order_search_stack(self, root):
         """利用堆栈实现树的中序遍历"""
-        if root == None:
+        if root is None:
             return
         myStack = []
         node = root
@@ -151,9 +216,9 @@ class Tree(object):
             print(node.elem)
             node = node.rchild  # 开始查看它的右子树
 
-    def later_stack(self, root):
+    def post_order_search_stack(self, root):
         """利用堆栈实现树的后序遍历"""
-        if root == None:
+        if root is None:
             return
         myStack1 = []
         myStack2 = []
@@ -169,64 +234,28 @@ class Tree(object):
         while myStack2:  # 将myStack2中的元素出栈，即为后序遍历次序
             print(myStack2.pop().elem)
 
-    def level_queue(self, root):
-        """利用队列实现树的层次遍历"""
-        if root == None:
-            return
-        myQueue = []
-        result = []
-        node = root
-        myQueue.append(node)
-        result.append(node)
-        while myQueue:
-            node = myQueue.pop(0)
-            print(node.elem)
-            if node.lchild != None:
-                myQueue.append(node.lchild)
-                result.append(node.lchild)
-            if node.rchild != None:
-                myQueue.append(node.rchild)
-                result.append(node.lchild)
-        return result
-
-    def findMax(self):
-        lst = self.front_stack(self.root)
-        return max(lst)
-
-    def findMin(self):
-        lst = self.front_stack(self.root)
-        return min(lst)
-
 
 if __name__ == '__main__':
     """主函数"""
-    # elems = range(10)           #生成十个数据作为树节点
-    # tree = Tree()          #新建一个树对象
-    # for elem in elems:
-    #     tree.add(elem)           #逐个添加树的节点
 
     node = Node(1, Node(2, Node(4)), Node(3, None, Node(5)))
     tree = Tree(node)
-    # print("队列实现层次遍历:")
-    # tree.level_queue(tree.root)
 
-    # print('\n\n递归实现先序遍历:')
-    # tree.front_digui(tree.root)
-    # print('\n递归实现中序遍历:')
-    # tree.middle_digui(tree.root)
-    # print('\n递归实现后序遍历:')
-    # tree.later_digui(tree.root)
-    #
-    # print('\n\n堆栈实现先序遍历:')
-    # tree.front_stack(tree.root)
-    # print('\n堆栈实现中序遍历:')
-    # tree.middle_stack(tree.root)
-    # print('\n堆栈实现后序遍历:')
-    # tree.later_stack(tree.root)
+    lst = tree.to_list()
+    print(tree.to_list().__str__())
 
-    tree.addNode(100)
-    print("队列实现层次遍历:")
-    tree.level_queue(tree.root)
-    tree.remove_leaf(tree.root, 1)
-    print("队列实现层次遍历:")
-    tree.level_queue(tree.root)
+    tree2 = Tree(Node(1))
+    print(id(tree2))
+    tree2.addNode(2)
+    tree2.addNode(3)
+    tree2.addNode(4)
+    tree2.addNode(5)
+    tree2.addNode(6)
+    tree2.addNode(7)
+
+    # tree2.from_list([1, 2, 5, 6, 8, 4])
+    tree2.remove_leaf(7)
+    print(id(tree2))
+    lst = tree2.to_list()
+
+    print(lst.__str__())
