@@ -1,6 +1,6 @@
 # coding=utf-8
 
-from lab1_immutable import *
+from lab1_mutable import *
 from hypothesis import given
 import hypothesis.strategies as st
 
