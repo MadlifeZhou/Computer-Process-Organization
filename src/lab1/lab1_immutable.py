@@ -1,11 +1,10 @@
 # coding=utf-8
-'''
+"""
 Author: Zhou Guancheng
 Date: 03-05-2020
 Title: A Immutable Binary Tree
-'''
+"""
 import math
-
 
 class Node(object):
     """Node class, the basic structure of a Tree"""
@@ -235,27 +234,3 @@ class Tree(object):
             print(myStack2.pop().elem)
 
 
-if __name__ == '__main__':
-    """主函数"""
-
-    node = Node(1, Node(2, Node(4)), Node(3, None, Node(5)))
-    tree = Tree(node)
-
-    lst = tree.to_list()
-    print(tree.to_list().__str__())
-
-    tree2 = Tree(Node(1))
-    print(id(tree2))
-    tree2.addNode(2)
-    tree2.addNode(3)
-    tree2.addNode(4)
-    tree2.addNode(5)
-    tree2.addNode(6)
-    tree2.addNode(7)
-
-    # tree2.from_list([1, 2, 5, 6, 8, 4])
-    tree2.remove_leaf(7)
-    print(id(tree2))
-    lst = tree2.to_list()
-
-    print(lst.__str__())
