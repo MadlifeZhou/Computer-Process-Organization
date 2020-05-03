@@ -6,6 +6,7 @@ Title: A Immutable Binary Tree
 """
 import math
 
+
 class Node(object):
     """Node class, the basic structure of a Tree"""
 
@@ -121,9 +122,13 @@ class Tree(object):
         for e in nodes:
             e.elem = f(e.elem)
 
+    def reduce(self, f, initial_state):
+        state = f(initial_state, self.to_list())
+        return state
+
     '''Find the Elements which fit the function'''
 
-    def findElem(self, f):
+    def find(self, f):
         lst = self.to_list()
         for e in lst:
             if not f(e):
@@ -234,3 +239,14 @@ class Tree(object):
             print(myStack2.pop().elem)
 
 
+if __name__ == '__main__':
+    def sum(init, list):
+        sum = 0
+        for e in list:
+            sum += e
+        return sum
+    tree = Tree()
+    tree.addNode(1)
+    tree.addNode(2)
+    tree.addNode(3)
+    tree.addNode(4)
