@@ -26,7 +26,7 @@ class Tree(object):
 
     def __init__(self, root=Node(None)):
         self.root = root
-
+        self.myList=[]
     '''Add a Node to Tree'''
 
     def addNode(self, elem):
@@ -54,7 +54,10 @@ class Tree(object):
     '''Output the size of tree'''
 
     def size(self):
-        return len(self.level_queue(self.root))
+        if self.root.elem is None:
+            return 0
+        else:
+            return len(self.level_queue(self.root))
 
     '''remove the given leaf of tree'''
 
@@ -97,7 +100,7 @@ class Tree(object):
 
     def to_list(self):
         if self.root.elem is None:
-            return
+            return []
         lst = []
         result = self.level_queue(self.root)
         for e in result:
@@ -118,12 +121,19 @@ class Tree(object):
     '''Implement a Function on all the nodes of Tree'''
 
     def map(self, f):
+        if self.root.elem is None:
+            return
         nodes = self.level_queue(self.root)
         for e in nodes:
             e.elem = f(e.elem)
 
     def reduce(self, f, initial_state):
-        state = f(initial_state, self.to_list())
+        if self.root.elem is None:
+            return initial_state
+        lst = self.level_queue(self.root)
+        state = initial_state
+        for e in lst:
+            state = f(state, e.elem)
         return state
 
     '''Find the Elements which fit the function'''
@@ -140,7 +150,7 @@ class Tree(object):
     def level_queue(self, root):
         """利用队列实现树的层次遍历"""
         if root.elem is None:
-            return
+            return None
         myQueue = []
         result = []
         node = root
@@ -238,15 +248,23 @@ class Tree(object):
         while myStack2:  # 将myStack2中的元素出栈，即为后序遍历次序
             print(myStack2.pop().elem)
 
+    def __iter__(self):
+        self.myList = self.level_queue(self.root)
+        if self.myList is not None:
+            self.myList.pop(0)
+        return Tree(self.root)
+
+    def __next__(self):
+        if self.root.elem is None:
+            raise StopIteration
+        tmp = self.root.elem
+        self.root = self.myList.pop(0)
+        print(self.root.elem)
+        return tmp
+
 
 if __name__ == '__main__':
-    def sum(init, list):
-        sum = 0
-        for e in list:
-            sum += e
-        return sum
-    tree = Tree()
-    tree.addNode(1)
-    tree.addNode(2)
-    tree.addNode(3)
-    tree.addNode(4)
+    lst = Tree()
+    lst.from_list([1, 2, 3])
+    add = lambda st, e: st + e
+    print(lst.reduce(add, 0))
