@@ -58,17 +58,42 @@ The functions of **mutable tree** are as follows：
 
 - Find
 
-  
+  Traverse a tree, use a function to judge each node, if the condition is met, add its value to a list, and return to a list after the traversal is completed, this list is the value of all nodes that meet the function condition
 
 - reduce
 
-  Process structure elements to build a return value by speci ﬁ c functions. Traverse a tree, enter an initial state value, each time a node is traversed, the initial state value is updated according to the function, and finally the final state value is output
-
-- Find the elements level by level
-
-  
+  Process structure elements to build a return value by speci ﬁ c functions. Traverse a tree, enter an initial state value, each time a node is traversed, the initial state value is updated according to the function, and finally the final state value is output.
 
 - Iterator
+
+  First record the root node value, store each node in a list using hierarchical traversal, then traverse the list, and then take the next node value in sequence to complete the iterator traversal.
+
+### Contribution Summary
+
+**Zhou** completed the development of the mutable tree class and finished writing its test class. **Wang** completed the development of the mutable tree class and completed the writing of its test class.
+
+### Work Demonstration
+
+For mutable tree, we define a tree class, we can use it
+
+```python
+from lab1_mutable import *
+tree = Tree()
+tree.from_list([1,2,3,4,5])
+print(tree.to_list())
+```
+
+Then we could get output in console
+
+```shell
+$ [1,2,3,4,5]
+```
+
+For test class, we use pycharm to develop it . if you want to test a function of mutable tree, you can click  **play** icon to run a test for a function
+
+![image-20200506152144167](/Users/apple/Library/Application Support/typora-user-images/image-20200506152144167.png)
+
+
 
 ###### 
 
