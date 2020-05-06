@@ -91,6 +91,12 @@ $ [1,2,3,4,5]
 
 For test class, we use pycharm to develop it . if you want to test a function of mutable tree, you can click  **play** icon to run a test for a function
 
+![image-20200506152705449](https://github.com/MadlifeZhou/Computer-Process-Organization/blob/master/test.jpg)
+
+### Conclusion
+
+In this experiment, I completed the preparation and production of mutable tree, implemented addNode, remove an element, size, from and to python lists, ﬁ nd, filerdata, map, reduce, iterator methods. And passed all its tests. Deepen the understanding of Python and the understanding of data structure
+
 
 
 
