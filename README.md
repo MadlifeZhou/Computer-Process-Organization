@@ -68,13 +68,42 @@ The functions of **mutable tree** are as follows：
 
   First record the root node value, store each node in a list using hierarchical traversal, then traverse the list, and then take the next node value in sequence to complete the iterator traversal.
 
+### Immutable Tree 
+
+The functions of **Immutable Tree** are as follow:  
+
+* add_node 
+  Add a node into a tree. Each node's position should be specified manually in this structure.
+* get_depth 
+  Return the depth of a full binary tree.
+* create_none_list 
+  Return a list that every element is `None`.
+* to_list 
+  Return a list which can represent a binary tree.  
+* from_list
+  Return a binary tree according to the given list.  
+* get_size 
+  Return the number of a binary tree.  
+* remove_node 
+  Remove the specified node in the binary tree. If the node is a leaf, it will be removed directly. Otherwise, node with its children will be all removed.
+* find_node 
+  Specified element will be found and stored into a list.
+* filter 
+  Filter the element in the binary tree according to the specified function.  
+* map 
+  Map the element in the binary tree according to the specified function.
+* my_reduce 
+  The binary tree will be converted to the corresponding list and reduce the every element.
+* iterator 
+  Return a iterator of this structure.
+
 ### Contribution Summary
 
 **Zhou** completed the development of the mutable tree class and finished writing its test class. **Wang** completed the development of the mutable tree class and completed the writing of its test class.
 
 ### Work Demonstration
 
-For mutable tree, we define a tree class, we can use it
+For **mutable tree**, we define a tree class, we can use it
 
 ```python
 from lab1_mutable import *
@@ -92,6 +121,30 @@ $ [1,2,3,4,5]
 For test class, we use pycharm to develop it . if you want to test a function of mutable tree, you can click  **play** icon to run a test for a function
 
 ![image-20200506152705449](https://github.com/MadlifeZhou/Computer-Process-Organization/blob/master/test.jpg)
+
+**For immutable tree**
+
+A binary tree is created as follow:
+
+```python
+from lab1_immutable import *
+#Create a binary tree with 4 nodes.
+tree = add_node(value=1, left=add_node(value=2), right=add_node(value=3, left=Node(value=4)))
+#Create a empty list to store the binary tree.
+lst = create_none_list(tree)
+#Convert the binary tree to list.
+to_list(tree, 0, lst)
+#Print this list.
+print(lst)
+```
+
+We can see the output from the command line.
+
+```shell
+$ [1, 2, 3, None, None, 4, None]
+```
+
+From above, this list correctly reflects the structure of the binary tree.
 
 ### Conclusion
 
