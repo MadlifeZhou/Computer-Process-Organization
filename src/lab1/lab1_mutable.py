@@ -26,7 +26,8 @@ class Tree(object):
 
     def __init__(self, root=Node(None)):
         self.root = root
-        self.myList=[]
+        self.myList = []
+
     '''Add a Node to Tree'''
 
     def addNode(self, elem):
@@ -61,7 +62,7 @@ class Tree(object):
 
     '''remove the given leaf of tree'''
 
-    def remove_leaf(self, elem):
+    def remove(self, elem):
         if self.root is None:
             return
         myQueue = []
@@ -139,11 +140,28 @@ class Tree(object):
     '''Find the Elements which fit the function'''
 
     def find(self, f):
+        if self.root.elem is None:
+            return
         lst = self.to_list()
         for e in lst:
-            if not f(e):
+            if f(e):
                 lst.remove(e)
         return lst
+
+    def filter(self, f):
+        if self.root.elem is None:
+            return
+        myQueue = []
+        node = self.root
+        myQueue.append(node)
+        while myQueue:
+            node = myQueue.pop(0)
+            if f(node.elem):
+                self.remove(node.elem)
+            if node.lchild is not None:
+                myQueue.append(node.lchild)
+            if node.rchild is not None:
+                myQueue.append(node.rchild)
 
     '''Search the elements of Tree level by level'''
 
@@ -264,7 +282,6 @@ class Tree(object):
 
 
 if __name__ == '__main__':
-    lst = Tree()
-    lst.from_list([1, 2, 3])
-    add = lambda st, e: st + e
-    print(lst.reduce(add, 0))
+    tree = Tree()
+    tree.from_list([1, 2, 3, 4, 5])
+    print(tree.find())

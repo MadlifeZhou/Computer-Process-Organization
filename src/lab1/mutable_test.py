@@ -60,6 +60,24 @@ class TestMutableList(unittest.TestCase):
             lst.from_list(e)
             self.assertEqual(lst.reduce(lambda st, _: st + 1, 0), lst.size())
 
+    def test_find(self):
+        lst = Tree()
+        self.assertEqual(lst.find(lambda x: x % 2), None)
+
+        lst = Tree()
+        lst.from_list([1, 2, 3, 4, 5, 6])
+        self.assertEqual(lst.find(lambda x: x % 2), [2, 4, 6])
+
+    def test_filter(self):
+        tree = Tree()
+        tree.filter(lambda x: x % 2)
+        self.assertEqual(tree.to_list(), [])
+
+        tree = Tree()
+        tree.from_list([2, 4, 6, 1, 3, 5, 7])
+        tree.filter(lambda x: x % 2)
+        self.assertEqual(tree.to_list(), [2, 4, 6])
+
     @given(st.lists(st.integers()))
     def test_from_list_to_list_equality(self, a):
         lst = Tree()
