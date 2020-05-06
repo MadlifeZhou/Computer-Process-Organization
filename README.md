@@ -73,28 +73,40 @@ The functions of **mutable tree** are as follows：
 The functions of **Immutable Tree** are as follow:  
 
 * add_node 
+
   Add a node into a tree. Each node's position should be specified manually in this structure.
 * get_depth 
+
   Return the depth of a full binary tree.
 * create_none_list 
+
   Return a list that every element is `None`.
 * to_list 
+
   Return a list which can represent a binary tree.  
 * from_list
+
   Return a binary tree according to the given list.  
 * get_size 
+
   Return the number of a binary tree.  
 * remove_node 
+
   Remove the specified node in the binary tree. If the node is a leaf, it will be removed directly. Otherwise, node with its children will be all removed.
 * find_node 
+
   Specified element will be found and stored into a list.
 * filter 
+
   Filter the element in the binary tree according to the specified function.  
 * map 
+
   Map the element in the binary tree according to the specified function.
 * my_reduce 
+
   The binary tree will be converted to the corresponding list and reduce the every element.
 * iterator 
+
   Return a iterator of this structure.
 
 ### Contribution Summary
