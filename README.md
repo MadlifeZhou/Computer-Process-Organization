@@ -91,7 +91,7 @@ $ [1,2,3,4,5]
 
 For test class, we use pycharm to develop it . if you want to test a function of mutable tree, you can click  **play** icon to run a test for a function
 
-![image-20200506152144167](/Users/apple/Library/Application Support/typora-user-images/image-20200506152144167.png)
+
 
 
 
