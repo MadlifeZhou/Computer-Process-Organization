@@ -1,6 +1,14 @@
 # Computer-Process-Organization
+
 HDU-ITMO Computer Process Organization labtoray work
 
+Group Name: **JIDI**
+
+Group Member: 
+
+- **Wang Jiayi**
+- **Zhou Guancheng** (ID: 192050193)
+---
 Welcome to our page !
 
 You could click the link below to check our work
