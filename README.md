@@ -1,6 +1,6 @@
 # Computer-Process-Organization
 
-HDU-ITMO Computer Process Organization labtoray work
+HDU-ITMO Computer Process Organization laboratory work
 
 Group Name: **JIDI**
 
