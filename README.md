@@ -6,7 +6,7 @@ Group Name: **JIDI**
 
 Group Member: 
 
-- **Wang Jiayi**
+- **Wang Jiayi** (ID:192050191)
 - **Zhou Guancheng** (ID: 192050193)
 ---
 Welcome to our page !
