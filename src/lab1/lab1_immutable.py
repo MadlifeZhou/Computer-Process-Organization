@@ -6,14 +6,14 @@ class Node(object):
         self.lchild = lchild
         self.rchild = rchild
     
-    def __eq__(self, other):
-        if id(self) == id(other):
+    def __eq__(self, other_node):
+        if id(self) == id(other_node):
             return True
         else:
             lst_self  = create_none_list(self)
-            lst_other = create_none_list(other)
+            lst_other = create_none_list(other_node)
             to_list(self, 0, lst_self)
-            to_list(other, 0, lst_other)
+            to_list(other_node, 0, lst_other)
             return lst_self == lst_other
             
     
@@ -35,9 +35,32 @@ def to_list(node, cntr, lst):
     else:
         return
 
+def to_list_without_none(node):
+    lst_without_none = []
+    tmp_lst = create_none_list(node)
+    to_list(node, 0, tmp_lst)
+    for i in range(len(tmp_lst)):
+        if tmp_lst[i] is not None:
+            lst_without_none.append(tmp_lst[i])
+    return lst_without_none
+
+def mconcat(node_1, node_2):
+    if node_2 is None:
+        return node_1;
+    elif node_1 is None:
+        return mconcat(node_2, node_1)
+    else:
+        lst_node_1 = to_list_without_none(node_1)
+        lst_node_2 = to_list_without_none(node_2)
+        lst_node_1.extend(lst_node_2)
+        return lst_node_1
+
 def from_list(lst, index):
-    if index < len(lst):
-        return Node(value=lst[index], lchild=from_list(lst, (index<<1)+1), rchild=from_list(lst, (index<<1)+2))
+    if len(lst) > 0:
+        if index < len(lst):
+            return Node(value=lst[index], lchild=from_list(lst, (index<<1)+1), rchild=from_list(lst, (index<<1)+2))
+    else:
+        return None
 
 
 def is_leaf(node):
@@ -136,3 +159,8 @@ def iterator(node):
     lst = create_none_list(node)
     to_list(node, 0, lst)
     return iter(lst)
+
+node_1 = None
+node_2 = add_node(value=1, left=add_node(value=2), right=add_node(value=3, left=Node(value=4)))
+lst = mconcat(node_1, node_2)
+print(lst)

@@ -1,5 +1,7 @@
 from lab1_immutable import *
 import unittest
+from hypothesis import given
+import hypothesis.strategies as st
 
 class TestImmutableMutableList(unittest.TestCase):
     def test_size(self):
@@ -26,10 +28,31 @@ class TestImmutableMutableList(unittest.TestCase):
         to_list(node_2, 0, lst_node_2)
         self.assertEqual(lst_node_2, [1, 2, 3, None, None, 4, None])
 
+        node_3 = None
+        lst_node_3 = create_none_list(node_3)
+        to_list(node_3, 0, lst_node_3)
+        self.assertEqual(lst_node_3, [])
+
+    def test_to_list_without_none(self):
+        node_1 = Node(value=1)
+        node_2 = add_node(value=1, left=add_node(value=2), right=add_node(value=3, left=Node(value=4)))
+        self.assertEqual(to_list_without_none(node_1), [1])
+        self.assertEqual(to_list_without_none(node_2), [1, 2, 3, 4])
+
+    def test_mconcat(self):
+        node_1 = Node(value=1)
+        node_2 = add_node(value=1, left=add_node(value=2), right=add_node(value=3, left=Node(value=4)))
+        self.assertEqual(mconcat(node_1, node_2), [1, 1, 2, 3, 4])
+
+
     def test_from_list(self):
         list_1 = [1, 2, 3, None, None, 4, None]
+        list_2 = []
+        list_3 = [1]
         node_1 = add_node(value=1, left=add_node(value=2), right=add_node(value=3, left=Node(value=4))) 
         self.assertEqual(from_list(list_1, 0), node_1)
+        self.assertEqual(from_list(list_2,0), None)
+        self.assertEqual(from_list(list_3, 0), Node(value=1))
 
     def test_add_node(self):
         self.assertEqual(Node(1), add_node(1))
@@ -57,8 +80,6 @@ class TestImmutableMutableList(unittest.TestCase):
                 break
         self.assertEqual(iter_lst, [1, 2, 3, None, None, 4, None])
 
-    from hypothesis import given
-    import hypothesis.strategies as st
     @given(node=st.lists(st.integers()))
     def test_equality(self, node):
         tree = from_list(node, 0)
@@ -69,5 +90,11 @@ class TestImmutableMutableList(unittest.TestCase):
             if new_lst[i] != None:
                 lst.append(new_lst[i])
         self.assertEqual(lst, node)
+
+    @given (lst=st.lists(st.integers()))
+    def test_monoid_identity(self, lst):
+        tree = from_list(lst, 0)
+        self.assertEqual(mconcat(tree, None), tree)
+        self.assertEqual(mconcat(None, tree), tree)
 if __name__ == '__main__':
     unittest.main()
