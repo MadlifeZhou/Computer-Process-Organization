@@ -106,7 +106,7 @@ The functions of **Immutable Tree** are as follow:
   ![create_none_list](https://tva1.sinaimg.cn/large/007S8ZIlly1geoinokp8nj30wy082gmd.jpg)
 * to_list 
 
-  Return a list which can represent a binary tree.  
+  Return a list which can represent a binary tree.</br><br/> 
   ![to_list](https://tva1.sinaimg.cn/large/007S8ZIlly1geoiopset2j30wy082gmc.jpg)
 * from_list
 
