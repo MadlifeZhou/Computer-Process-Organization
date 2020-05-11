@@ -17,6 +17,15 @@ class TestMutableList(unittest.TestCase):
         self.assertEqual(Tree(Node('a')).to_list(), ['a'])
         self.assertEqual(Tree(Node('a', Node('b'))).to_list(), ['a', 'b'])
 
+    def test_remove(self):
+        self.assertEqual(Tree().remove(1),None)
+        tree = Tree()
+        tree.from_list([1])
+        self.assertEqual(tree.remove(1),None)
+        tree.from_list([1,2,3,4,5])
+        tree.remove(4)
+        self.assertEqual(tree.to_list(), [1,2,3,5])
+
     def test_from_list(self):
         test_data = [[], ['a'], ['a', 'b']]
         for e in test_data:
