@@ -94,40 +94,50 @@ The functions of **Immutable Tree** are as follow:
 
 * add_node 
 
-  Add a node into a tree. Each node's position should be specified manually in this structure.
+  Add a node into a tree. Each node's position should be specified manually in this structure.</br><br/>
+  ![add_node](https://tva1.sinaimg.cn/large/007S8ZIlly1geoihrqlboj30x2084q3n.jpg)
 * get_depth 
 
-  Return the depth of a full binary tree.
+  Return the depth of a full binary tree.</br><br/>
+  ![get_depth](https://tva1.sinaimg.cn/large/007S8ZIlly1geoilm632dj30wy082t9g.jpg)
 * create_none_list 
 
-  Return a list that every element is `None`.
+  Return a list that every element is `None`.</br><br/>
+  ![create_none_list](https://tva1.sinaimg.cn/large/007S8ZIlly1geoinokp8nj30wy082gmd.jpg)
 * to_list 
 
   Return a list which can represent a binary tree.  
+  ![to_list](https://tva1.sinaimg.cn/large/007S8ZIlly1geoiopset2j30wy082gmc.jpg)
 * from_list
 
-  Return a binary tree according to the given list.  
+  Return a binary tree according to the given list. </br><br/> 
+  ![from_list](https://tva1.sinaimg.cn/large/007S8ZIlly1geoiphodkaj30wy082t9g.jpg)
 * get_size 
 
-  Return the number of a binary tree.  
+  Return the number of a binary tree. </br><br/> 
+  ![get_size](https://tva1.sinaimg.cn/large/007S8ZIlly1geoiqg5vpwj30wy082js4.jpg)
 * remove_node 
 
-  Remove the specified node in the binary tree. If the node is a leaf, it will be removed directly. Otherwise, node with its children will be all removed.
+  Remove the specified node in the binary tree. If the node is a leaf, it will be removed directly. Otherwise, node with its children will be all removed.</br><br/>
+  ![remove_node](https://tva1.sinaimg.cn/large/007S8ZIlly1geoir7tcgej30wy082t9g.jpg)
 * find_node 
 
-  Specified element will be found and stored into a list.
-* filter 
+  Specified element will be found and stored into a list.</br><br/>
+  ![find_node](https://tva1.sinaimg.cn/large/007S8ZIlly1geoirz02v0j30wy082wf8.jpg)
 
-  Filter the element in the binary tree according to the specified function.  
-* map 
-
-  Map the element in the binary tree according to the specified function.
-* my_reduce 
-
-  The binary tree will be converted to the corresponding list and reduce the every element.
 * iterator 
 
-  Return a iterator of this structure.
+  Return a iterator of this structure.</br><br/>
+  ![iterator](https://tva1.sinaimg.cn/large/007S8ZIlly1geoitmnegmj30wy0823z8.jpg)
+
+* equality  
+  Test this structure's equality.</br><br/>
+  ![equality](https://tva1.sinaimg.cn/large/007S8ZIlly1geoiw9cse1j30wy082js4.jpg)
+
+* monoid  
+  Test this structure's monoid.
+  </br><br/>
+  ![monoid](https://tva1.sinaimg.cn/large/007S8ZIlly1geoiwz3qzwj30wy082751.jpg)
 
 ### Contribution Summary
 
