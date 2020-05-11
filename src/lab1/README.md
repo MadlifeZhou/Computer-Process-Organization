@@ -32,41 +32,61 @@ The functions of **mutable tree** are as follows：
 
   We first traverse the nodes of a tree layer by layer, in order to find which node has an empty child node, if we find an empty child node, we need to insert the inserted node.
 
+  ![image-20200511090420052](https://tva1.sinaimg.cn/large/007S8ZIlly1geo8hirou6j30gy07w0te.jpg)
+
 - size
 
   Traverse a tree to get a queue full of nodes, and calculate the length of the queue is the number of nodes in the tree
+
+  ![image-20200511091436656](https://tva1.sinaimg.cn/large/007S8ZIlly1geo8s7nyuzj30gt08074x.jpg)
 
 - Remove
 
   We traverse a tree, if the node is the node we want to delete, we delete it
 
+  ![image-20200511094313080](https://tva1.sinaimg.cn/large/007S8ZIlgy1geo9lunjj9j30i507wq3n.jpg)
+
 - to list
 
   Traverse a tree, store the results of traversing nodes in a queue, and extract the node values of the queue into a list, which is the result we want
+
+  ![image-20200511091524097](https://tva1.sinaimg.cn/large/007S8ZIlgy1geo8swpvwhj30in07t0tg.jpg)
 
 - from list
 
   We provide a list, traverse the list, and add it to the tree in turn
 
+  ![image-20200511091604547](https://tva1.sinaimg.cn/large/007S8ZIlgy1geo8tlzulmj30jb07smxw.jpg)
+
 - map
 
   Traverse a tree, and then perform a function operation on it, and change the value of the node according to the function
+
+  ![image-20200511091637165](https://tva1.sinaimg.cn/large/007S8ZIlgy1geo8u64jucj30im07tt9f.jpg)
 
 - Filter
 
   Traverse a tree, and then judge it, if it does not meet the function filter conditions, delete it, and ignore it if it meets the function conditions
 
+  ![image-20200511091712464](https://tva1.sinaimg.cn/large/007S8ZIlgy1geo8usheppj30kg07xgmd.jpg)
+
 - Find
 
   Traverse a tree, use a function to judge each node, if the condition is met, add its value to a list, and return to a list after the traversal is completed, this list is the value of all nodes that meet the function condition
+
+  ![image-20200511091731622](https://tva1.sinaimg.cn/large/007S8ZIlgy1geo8v4g4j6j30j407paas.jpg)
 
 - reduce
 
   Process structure elements to build a return value by speci ﬁ c functions. Traverse a tree, enter an initial state value, each time a node is traversed, the initial state value is updated according to the function, and finally the final state value is output.
 
+  ![image-20200511091756505](https://tva1.sinaimg.cn/large/007S8ZIlgy1geo8vjsbxqj30j707zmxw.jpg)
+
 - Iterator
 
   First record the root node value, store each node in a list using hierarchical traversal, then traverse the list, and then take the next node value in sequence to complete the iterator traversal.
+  
+  ![image-20200511091822916](https://tva1.sinaimg.cn/large/007S8ZIlgy1geo8w0neolj30iz07y750.jpg)
 
 ### Immutable Tree 
 
@@ -132,7 +152,7 @@ $ [1,2,3,4,5]
 
 For test class, we use pycharm to develop it . if you want to test a function of mutable tree, you can click  **play** icon to run a test for a function
 
-![image-20200506152705449](https://github.com/MadlifeZhou/Computer-Process-Organization/blob/master/test.jpg)
+<!--![image-20200506152705449](https://github.com/MadlifeZhou/Computer-Process-Organization/blob/master/test.jpg)-->
 
 **For immutable tree**
 

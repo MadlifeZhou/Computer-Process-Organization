@@ -19,7 +19,7 @@ class Node(object):
         return 1 + max(self.lchild)
 
 
-class Tree(object):
+class Tree:
     """Tree"""
 
     '''Initial the Tree'''
@@ -27,17 +27,19 @@ class Tree(object):
     def __init__(self, root=Node(None)):
         self.root = root
         self.myList = []
+        self.recordList = []
+
 
     '''Add a Node to Tree'''
 
     def addNode(self, elem):
         myQueue = []
         new_node = Node(elem)
-        # 如果树是空的，则对根节点赋值
+        # if the tree is empty, we should add nodes to the root of tree
         if self.root.elem is None:
             self.root = new_node
             return
-        # 如果树不是空的，则使用层次遍历添加节点
+        # if the tree is not empty, we should add nodes to tree level by level
         myQueue.append(self.root)
         while myQueue:
             tree_node = myQueue.pop(0)
@@ -63,12 +65,11 @@ class Tree(object):
     '''remove the given leaf of tree'''
 
     def remove(self, elem):
-        if self.root is None:
+        if self.root.elem is None:
             return
         myQueue = []
         node = self.root
         if node.elem == elem and (node.lchild is not None or node.lchild is not None):
-            print("the element you choose is not the leaf")
             return
         myQueue.append(node)
         while myQueue:
@@ -85,17 +86,15 @@ class Tree(object):
                 return
             elif left is not None and left.elem == elem and (left.lchild is not None
                                                              or left.rchild is not None):
-                print("the element you choose is not the leaf")
                 return
             elif right is not None and right.elem == elem and (right.lchild is not None
                                                                or right.rchild is not None):
-                print("the element you choose is not the leaf")
                 return
             if left is not None:
                 myQueue.append(node.lchild)
             if right is not None:
                 myQueue.append(node.rchild)
-        print("we can not find the elem")
+
 
     '''Convert all the nodes of Tree to a list'''
 
@@ -166,7 +165,7 @@ class Tree(object):
     '''Search the elements of Tree level by level'''
 
     def level_queue(self, root):
-        """利用队列实现树的层次遍历"""
+        """Using queue to find nodes level by level """
         if root.elem is None:
             return None
         myQueue = []
@@ -194,31 +193,31 @@ class Tree(object):
         return min(lst)
 
     def pre_order_search(self, root):
-        """利用递归实现树的先序遍历"""
+        """pre-order search"""
         if root is None:
             return []
-        print(root.elem)
+        # print(root.elem)
         self.front_digui(root.lchild)
         self.front_digui(root.rchild)
 
     def in_order_search(self, root):
-        """利用递归实现树的中序遍历"""
+        """in-order search"""
         if root is None:
             return
         self.middle_digui(root.lchild)
-        print(root.elem)
+        # print(root.elem)
         self.middle_digui(root.rchild)
 
     def post_order_search(self, root):
-        """利用递归实现树的后序遍历"""
+        """post-order search"""
         if root is None:
             return
         self.later_digui(root.lchild)
         self.later_digui(root.rchild)
-        print(root.elem)
+        # print(root.elem)
 
     def pre_order_search_stack(self, root):
-        """利用堆栈实现树的先序遍历"""
+        """pre-order search by stack"""
         if root is None:
             return
         myStack = []
@@ -226,7 +225,7 @@ class Tree(object):
         node = root
         while node or myStack:
             while node:  # 从根节点开始，一直找它的左子树
-                print(node.elem)
+                # print(node.elem)
                 all_nodes.append(node.elem)
                 myStack.append(node)
                 node = node.lchild
@@ -235,7 +234,7 @@ class Tree(object):
         return all_nodes
 
     def in_order_search_stack(self, root):
-        """利用堆栈实现树的中序遍历"""
+        """in-order search by stack"""
         if root is None:
             return
         myStack = []
@@ -245,11 +244,11 @@ class Tree(object):
                 myStack.append(node)
                 node = node.lchild
             node = myStack.pop()  # while结束表示当前节点node为空，即前一个节点没有左子树了
-            print(node.elem)
+            # print(node.elem)
             node = node.rchild  # 开始查看它的右子树
 
     def post_order_search_stack(self, root):
-        """利用堆栈实现树的后序遍历"""
+        """post order search stack"""
         if root is None:
             return
         myStack1 = []
@@ -264,7 +263,8 @@ class Tree(object):
                 myStack1.append(node.rchild)
             myStack2.append(node)
         while myStack2:  # 将myStack2中的元素出栈，即为后序遍历次序
-            print(myStack2.pop().elem)
+            pass
+            # print(myStack2.pop().elem)
 
     def __iter__(self):
         self.myList = self.level_queue(self.root)
@@ -280,8 +280,3 @@ class Tree(object):
         print(self.root.elem)
         return tmp
 
-
-if __name__ == '__main__':
-    tree = Tree()
-    tree.from_list([1, 2, 3, 4, 5])
-    print(tree.find())
