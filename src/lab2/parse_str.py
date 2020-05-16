@@ -129,8 +129,3 @@ def calculate(number_list, custom_function=None, custom_parameter=None):
             else:
                 number_stack.push(str(operator_2 / operator_1))
     return number_stack.pop()
-
-str_expression = '3*(pow(2, 3)+tan0)-f(x)'
-lst = parse_str(str_expression)
-calculate(lst, lambda x:x*1, 1)
-print(lst)
