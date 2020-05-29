@@ -42,7 +42,19 @@ class TestParseStr(unittest.TestCase):
         str_1 = '(4-1)*(pow(2, 3)+sin0)-f(x)'
         str_2 = '3*(pow(2, 3)+cos0)-f(x)'
         str_3 = '1+f(x)'
+        str_4 = '1+f(x,y)+z'
         self.assertEqual(calculate(number_list=parse_str(str_1), custom_function=lambda x: x + 1, custom_parameter={'x': 1}), 22)
         self.assertEqual(calculate(number_list=parse_str(str_2), custom_function=lambda x: x * 1, custom_parameter={'x': 1}), 26)
         self.assertEqual(calculate(number_list=parse_str(str_3), custom_function=lambda x: x ** 2, custom_parameter={'x': 1}), 2)
+        self.assertEqual(calculate(number_list=parse_str(str_4), custom_function=lambda x, y:x*y, custom_parameter={'x': 2, 'y': 5, 'z': 8}), 19)
+
+    def test_graph(self):
+        str_1 = '(4-1)*(pow(2,3)+cos0)-f(x)'
+        graph_1 = 'digraph G {\n  INPUT[shape=rect label="(4-1)*(pow(2,3)+cos0)-f(x)"];\n  OUTPUT[shape=rect];\n  node_0[label="4"];\n  INPUT -> node_0;\n  node_1[label="1"];\n  INPUT -> node_1;\n  node_2[label="-" shape=square];\n  node_3[label="pow(2,3)"];\n  INPUT -> node_3;\n  node_4[label="cos0"];\n  INPUT -> node_4;\n  node_5[label="+" shape=square];\n  node_6[label="*" shape=square];\n  node_7[label="f(x)"];\n  INPUT -> node_7;\n  node_8[label="-" shape=square];\n  node_result_of_pow[label="8"];\n  node_3 -> node_result_of_pow;\n  node_result_of_cos[label="1"];\n  node_4 -> node_result_of_cos;\n  node_result_of_f[label="2"];\n  node_7 -> node_result_of_f;\n  node_1 -> node_2;\n  node_0 -> node_2;\n  node_result_of_cos -> node_5;\n  node_result_of_pow -> node_5;\n  node_5 -> node_6;\n  node_2 -> node_6;\n  node_6 -> node_8;\n  node_result_of_f -> node_8;\n  node_8 -> OUTPUT[label="="];\n}'
+        graph = calculate(number_list=parse_str(str_1), str_expression=str_1,
+                                      custom_function=lambda x: x+1, custom_parameter={'x':1})
+        self.assertEqual(graph, graph_1)
+    if __name__ == '__main__':
+        unittest.main()
+
     

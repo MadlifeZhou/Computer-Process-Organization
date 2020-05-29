@@ -85,22 +85,31 @@ def calculate_custom_function(number_list, operator_tuple, custom_function, cust
     elif custom_function is not None:
         for e in number_list:
             if not (e.isdigit() or e in operator_tuple) and not 'y' <= e <= 'z':
-                res = str(custom_function(custom_parameter['x']))
+                variable_list = how_many_variable_in_custom_function(e, custom_parameter)
+                res = str(custom_function(*variable_list))
                 index = number_list.index(e)
                 number_list[index] = res
-                graph.append(F'  node_result_of_f[label="{res}"]')
-                graph.append(F'  node_{index} -> node_result_of_f')
+                graph.append(F'  node_result_of_f[label="{res}"];')
+                graph.append(F'  node_{index} -> node_result_of_f;')
                 func_dict[index] = 'f'
             elif 'y' <= e <= 'z':
                 index = number_list.index(e)
                 number_list[index] = str(custom_parameter[e])
-                graph.append(F'  node_result_of_{e}[label="{custom_parameter[e]}"]')
-                graph.append(F'  node_{index} -> node_result_of_{e}')
+                graph.append(F'  node_result_of_{e}[label="{custom_parameter[e]}"];')
+                graph.append(F'  node_{index} -> node_result_of_{e};')
                 func_dict[index] = e
     else:
         for e in number_list:
             if 'x' <= e <= 'z':
                 number_list[number_list.index(e)] = str(custom_parameter[e])
+
+def how_many_variable_in_custom_function(function_str_expression, custom_parameter):
+    #Calculate how many variables in a custom function:f(x) -> 1, f(x, y) -> 2
+    variable_list = []
+    for e in function_str_expression:
+        if 'x' <= e <= 'z':
+            variable_list.append(custom_parameter[e])
+    return variable_list
 
 def calculate(str_expression=None, number_list=None, custom_function=None, custom_parameter=None):
     operator_tuple = ('+', '-', '*', '/')
@@ -205,48 +214,54 @@ def calculate(str_expression=None, number_list=None, custom_function=None, custo
                 tmp_dict[res]['number_2'] = number_2
                 plot_stack_graph(number_1, number_2, e, operator_index, func_dict, tmp_dict, number_list, graph)
     num_res = number_stack.pop()
-    graph.append(F'  node_{len(number_list)-1} -> OUTPUT[label="="]')
+    graph.append(F'  node_{len(number_list)-1} -> OUTPUT[label="="];')
     graph.append('}')
     if type(eval(num_res)) is int: num_res = int(num_res)
     else: num_res = float(num_res)
     if str_expression is None: return num_res
-    else: return num_res, '\n'.join(graph)
+    else: return '\n'.join(graph)
+    
 
 def my_list_remove(lst, element):
     for i in range(len(lst)):
         if lst[i] == element:
             lst[i] = None
             break
+
 def plot_stack_graph(number_1, number_2, operator, operator_index, func_dict, tmp_dict, number_list, graph):
     #operator_index: operator poped from stack.
     if str(number_1) in number_list and str(number_2) in number_list:
         index_1, index_2 = number_list.index(str(number_1)), number_list.index(str(number_2))
         if index_1 in func_dict.keys():
-            graph.append(F'  node_result_of_{func_dict[index_1]} -> node_{operator_index}')
+            graph.append(F'  node_result_of_{func_dict[index_1]} -> node_{operator_index};')
         else:
-            graph.append(F'  node_{index_1} -> node_{operator_index}')
+            graph.append(F'  node_{index_1} -> node_{operator_index};')
         if index_2 in func_dict.keys():
-            graph.append(F'  node_result_of_{func_dict[index_2]} -> node_{operator_index}')
+            graph.append(F'  node_result_of_{func_dict[index_2]} -> node_{operator_index};')
         else:
-            graph.append(F'  node_{index_2} -> node_{operator_index}')
+            graph.append(F'  node_{index_2} -> node_{operator_index};')
+        my_list_remove(number_list, str(number_1))
+        my_list_remove(number_list, str(number_2))
     elif str(number_1) in number_list and number_2 in tmp_dict.keys():
         index_1 = number_list.index(str(number_1))
         after_calculation_operator_index = tmp_dict[number_2]['index']
-        graph.append(F'  node_{after_calculation_operator_index} -> node_{operator_index}')
+        graph.append(F'  node_{after_calculation_operator_index} -> node_{operator_index};')
         if index_1 in func_dict.keys():
-            graph.append(F'  node_result_of_{func_dict[index_1]} -> node_{operator_index}')
+            graph.append(F'  node_result_of_{func_dict[index_1]} -> node_{operator_index};')
         else:
-            graph.append(F'  node_{number_list[index_1]} -> node_{operator_index}')
+            graph.append(F'  node_{number_list[index_1]} -> node_{operator_index};')
+        my_list_remove(number_list, str(number_1))
     elif str(number_2) in number_list and number_1 in tmp_dict.keys():
         index_2 = number_list.index(str(number_2))
         after_calculation_operator_index = tmp_dict[number_1]['index']
-        graph.append(F'  node_{after_calculation_operator_index} -> node_{operator_index}')
+        graph.append(F'  node_{after_calculation_operator_index} -> node_{operator_index};')
         if index_2 in func_dict.keys():
-            graph.append(F'  node_result_of_{func_dict[index_2]} -> node_{operator_index}')
+            graph.append(F'  node_result_of_{func_dict[index_2]} -> node_{operator_index};')
         else:
-            graph.append(F'  node_{index_2} -> node_{operator_index}')
+            graph.append(F'  node_{index_2} -> node_{operator_index};')
+        my_list_remove(number_list, str(number_2))
     else:
         operator_index_1 = tmp_dict[number_1]['index']
         operator_index_2 = tmp_dict[number_2]['index']
-        graph.append(F'  node_{operator_index_1} -> node_{operator_index}')
-        graph.append(F'  node_{operator_index_2} -> node_{operator_index}')
+        graph.append(F'  node_{operator_index_1} -> node_{operator_index};')
+        graph.append(F'  node_{operator_index_2} -> node_{operator_index};')
