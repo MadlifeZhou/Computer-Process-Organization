@@ -119,21 +119,3 @@ class Future(object):
         self._status = 'FINISHED'
     def set_cancelled(self):
         self._status = 'CANCELLED'
-
-def latency():
-    time.sleep(100)
-if __name__ == '__main__':
-    exe = ThreadPoolExecutor(max_workers=2)
-    f_1 = exe.submit(lambda x:x+1, 1)
-    res_1 = f_1.result()
-    f_2 = exe.submit(latency)
-    f_3 = exe.submit(lambda x:x-1, 9)
-    f_3.cancel()
-    print(f_3.cancelled())
-    #f_4 = exe.submit(lambda x:x*4, 4)
-    #f_4.cancel()
-    #print(f_4.cancelled())
-    #res_2 = f_2.result()
-    status = f_1.done()
-    #print(res_1,f_3.result(), sep='\n')
-    #exe.shutdown()
