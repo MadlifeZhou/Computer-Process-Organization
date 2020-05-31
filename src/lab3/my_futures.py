@@ -94,12 +94,17 @@ class Future(object):
         Otherwise, wait until other thread's notification, or exceed time limit(timeout).
         """
         with self._condition:
-            if self._status == 'FINISHED':
+            if self._status == 'CANCELLED':
+                raise CancelledError()
+            elif self._status == 'FINISHED':
+                return self._result
+            self._condition.wait(timeout) #Block until future is done.
+            if self._status == 'CANCELLED':
+                raise CancelledError()
+            elif self._status == 'FINISHED':
                 return self._result
             else:
-                self._condition.wait(timeout)
-                return self._result
-
+                raise TimeoutError #Timeout.
     def set_result(self, result):
         with self._condition:
             self._result = result
@@ -119,3 +124,5 @@ class Future(object):
         self._status = 'FINISHED'
     def set_cancelled(self):
         self._status = 'CANCELLED'
+class CancelledError(Exception):
+    pass
