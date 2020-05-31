@@ -90,7 +90,7 @@ class Future(object):
 
     def result(self, timeout=None):
         """
-        If status of future is 'FINISHED', return result directly.
+        If state of future is 'FINISHED', return result directly.
         Otherwise, wait until other thread's notification, or exceed time limit(timeout).
         """
         with self._condition:
