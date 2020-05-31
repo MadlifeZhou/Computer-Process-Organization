@@ -74,19 +74,19 @@ class Future(object):
     def __init__(self):
         self._result = None
         self._condition = threading.Condition()
-        self._status = 'PENDING'
+        self._state = 'PENDING'
 
     def done(self):
         with self._condition:
-            return self._status == 'FINISHED'
+            return self._state == 'FINISHED'
 
     def running(self):
         with self._condition:
-            return self._status == 'RUNNING'
+            return self._state == 'RUNNING'
 
     def cancelled(self):
         with self._condition:
-            return self._status == 'CANCELLED'
+            return self._state == 'CANCELLED'
 
     def result(self, timeout=None):
         """
@@ -94,35 +94,35 @@ class Future(object):
         Otherwise, wait until other thread's notification, or exceed time limit(timeout).
         """
         with self._condition:
-            if self._status == 'CANCELLED':
+            if self._state == 'CANCELLED':
                 raise CancelledError()
-            elif self._status == 'FINISHED':
+            elif self._state == 'FINISHED':
                 return self._result
             self._condition.wait(timeout) #Block until future is done.
-            if self._status == 'CANCELLED':
+            if self._state == 'CANCELLED':
                 raise CancelledError()
-            elif self._status == 'FINISHED':
+            elif self._state == 'FINISHED':
                 return self._result
             else:
                 raise TimeoutError #Timeout.
     def set_result(self, result):
         with self._condition:
             self._result = result
-            self._status = 'FINISHED'
+            self._state = 'FINISHED'
             self._condition.notify_all()
 
 
     def cancel(self):
-        if self._status in ['RUNNING', 'FINISHED']:
+        if self._state in ['RUNNING', 'FINISHED']:
             return False
         else:
             self.set_cancelled()
 
     def set_running(self):
-        self._status = 'RUNNING'
+        self._state = 'RUNNING'
     def set_finished(self):
-        self._status = 'FINISHED'
+        self._state = 'FINISHED'
     def set_cancelled(self):
-        self._status = 'CANCELLED'
+        self._state = 'CANCELLED'
 class CancelledError(Exception):
     pass
