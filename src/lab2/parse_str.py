@@ -1,5 +1,4 @@
 from math import sin, cos, log
-from decimal import Decimal
 
 class MyStack(object):
     def __init__(self):
