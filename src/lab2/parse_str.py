@@ -89,16 +89,6 @@ def parse_str(expression):
 
 
 
-def how_many_variable_in_custom_function(function_str_expression, custom_parameter):
-    """
-    Calculate how many variables in a custom function:f(x) -> 1, f(x, y) -> 2
-    """
-    variable_list = []
-    for e in function_str_expression:
-        if 'x' <= e <= 'z':
-            variable_list.append(custom_parameter[e])
-    return variable_list
-
 def calculate(str_expression=None, number_list=None, custom_function=None, custom_parameter=None):
     operator_tuple = ('+', '-', '*', '/')
     func_dict, tmp_dict, graph, number_stack = {}, {}, [], MyStack()
