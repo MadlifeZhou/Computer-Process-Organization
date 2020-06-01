@@ -27,6 +27,13 @@ class MyStack(object):
         return self._lst.reverse()
 
 def parse_str(expression):
+    try:
+        if not detection_of_bracket_matches(expression):
+            raise BracketDismatchError(expression)
+    except BracketDismatchError as e:
+        print(e.msg)
+        return
+    
     number_stack, operator_stack, i = MyStack(), MyStack(), 0
     operator_priority = {'+': 1, '-': 1, '*': 2, '/': 2, '(': -1, ')': -1}
     while (i < len(expression)):
@@ -40,11 +47,20 @@ def parse_str(expression):
                     i += 1
                     if i == len(expression): break
             else:
-                while expression[i] not in operator_priority.keys():
+                while expression[i] not in list(operator_priority.keys())[0:4]:
                     tmp_str += expression[i]
+                    if expression[i] == ')':
+                        if i == len(expression): 
+                            break
+                        else:
+                            i += 1
+                            break
                     i += 1
-                    if i == len(expression): break
-            number_stack.push(tmp_str)
+                    #if i == len(expression) or expression[i] == ')': break
+            if detection_of_bracket_matches(tmp_str): number_stack.push(tmp_str)
+            else: 
+                number_stack.push(tmp_str[0:(len(tmp_str)-1)])
+                i -= 1
             if i == len(expression): break
         if expression[i].isdigit() or 'x' <= expression[i] <= 'z':
             # Digit will be pushed into stack directly.
@@ -139,7 +155,11 @@ def calculate(str_expression=None, number_list=None, custom_function=None, custo
                 res = number_1 * number_2
                 calculate_by_operator(number_1, number_2, e, res, func_dict, tmp_dict, number_list, graph, number_stack)
             elif e == '/':
-                res = number_2 / number_1
+                try:
+                    res = number_2 / number_1
+                except ZeroDivisionError:
+                    print('0 cannot be divided! Please check the input expression.')
+                    return
                 calculate_by_operator(number_1, number_2, e, res, func_dict, tmp_dict, number_list, graph, number_stack)
     num_res = number_stack.pop()
     graph.append(F'  node_{len(number_list)-1} -> OUTPUT[label="="];')
@@ -151,6 +171,19 @@ def calculate(str_expression=None, number_list=None, custom_function=None, custo
 
 
 
+def detection_of_bracket_matches(expression):
+    bracket_stack = MyStack()
+    for e in expression:
+        if e == '(':
+            bracket_stack.push(e)
+        elif e == ')':
+            if bracket_stack.is_empty(): return False
+            elif bracket_stack.top() == '(':
+                bracket_stack.pop()
+                continue
+            else: return False
+        else: continue
+    return True
 def how_many_variable_in_custom_function(function_str_expression, custom_parameter):
     """
     Calculate how many variables in a custom function:f(x) -> 1, f(x, y) -> 2
@@ -292,9 +325,14 @@ def plot_stack_graph(number_1, number_2, operator, operator_index, func_dict, tm
         graph.append(F'  node_{operator_index_1} -> node_{operator_index};')
         graph.append(F'  node_{operator_index_2} -> node_{operator_index};')
 
+class BracketDismatchError(Exception): 
+    def __init__(self, msg):
+        self.msg = F'Expression: \'{msg}\' has dismatched brackets, please check again.'
+
 
 
 if __name__ == '__main__':
-    str_1 = 'f(x)+1.1'
+    str_1 = '3*(pow(2, 3)+cos(0))-f(x)'
     parse_stack = parse_str(str_1)
-    calculate(number_list=parse_stack, custom_function=lambda x:x+1, custom_parameter={'x':1.1})
+    graph = calculate(number_list=parse_stack, str_expression=str_1, custom_function=lambda x:x+1, custom_parameter={'x':1})
+    print(graph)
