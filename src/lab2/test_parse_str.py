@@ -11,9 +11,9 @@ class TestParseStr(unittest.TestCase):
         self.assertEqual(calculate(number_list=parse_str(str_1), custom_function=None, custom_parameter={'y':2}), 5)
 
     def test_custom_function(self):
-        str_1 = 'f(x)+1'
-        self.assertEqual(calculate(number_list=parse_str(str_1), custom_function=lambda x: x+1, custom_parameter={'x':1}), 3)
-        self.assertEqual(calculate(number_list=parse_str(str_1), custom_function=lambda x: x+1, custom_parameter={'x':2}), 4)
+        str_1 = 'f(x)+1.1'
+        self.assertEqual(calculate(number_list=parse_str(str_1), custom_function=lambda x: x+1, custom_parameter={'x':1.1}), 3.2)
+        self.assertEqual(calculate(number_list=parse_str(str_1), custom_function=lambda x: x+1, custom_parameter={'x':2}), 4.1)
 
     def test_custom_function_and_parameter(self):
         str_1 = 'f(x)+y+z*3'
@@ -25,10 +25,13 @@ class TestParseStr(unittest.TestCase):
     def test_add(self):
         self.assertEqual(calculate(number_list=parse_str('1+2')), 3)
         self.assertEqual(calculate(number_list=parse_str('5+6+1')), 12)
+        self.assertEqual(calculate(number_list=parse_str('1.2+2.5')), 3.7)
+        self.assertEqual(calculate(number_list=parse_str('1.2+2.5+2.2')), 5.9)
 
     def test_sub(self):
         self.assertEqual(calculate(number_list=parse_str('1-2')), -1)
         self.assertEqual(calculate(number_list=parse_str('1-2-4')), -5)
+        self.assertEqual(calculate(number_list=parse_str('2.5-1.2')), 1.3)
 
     def test_mul(self):
         self.assertEqual(calculate(number_list=parse_str('3*1')), 3)
@@ -54,7 +57,10 @@ class TestParseStr(unittest.TestCase):
         graph = calculate(number_list=parse_str(str_1), str_expression=str_1,
                                       custom_function=lambda x: x+1, custom_parameter={'x':1})
         self.assertEqual(graph, graph_1)
-    if __name__ == '__main__':
-        unittest.main()
+
+
+        
+if __name__ == '__main__':
+    unittest.main()
 
     
