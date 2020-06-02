@@ -1,5 +1,7 @@
 from math import sin, cos, log
 
+
+
 class MyStack(object):
     def __init__(self):
         self._lst = []
@@ -25,14 +27,27 @@ class MyStack(object):
     def reverse(self):
         return self._lst.reverse()
 
+
+
+def input_data_validation(parse_str):
+    """
+    Decorator, input data control.
+    """
+    def wrapper(expression):
+        try:
+            if not detection_of_bracket_matches(expression):
+                raise BracketDismatchError(expression)
+            else:
+                return parse_str(expression)
+        except BracketDismatchError as exception:
+            print(exception.msg)
+    return wrapper
+
+
+
+@input_data_validation
 def parse_str(expression):
-    try:
-        if not detection_of_bracket_matches(expression):
-            raise BracketDismatchError(expression)
-    except BracketDismatchError as e:
-        print(e.msg)
-        return
-    
+    """Convert input expression into stack format."""
     number_stack, operator_stack, i = MyStack(), MyStack(), 0
     operator_priority = {'+': 1, '-': 1, '*': 2, '/': 2, '(': -1, ')': -1}
     while (i < len(expression)):
@@ -183,6 +198,9 @@ def detection_of_bracket_matches(expression):
             else: return False
         else: continue
     return True
+
+
+
 def how_many_variable_in_custom_function(function_str_expression, custom_parameter):
     """
     Calculate how many variables in a custom function:f(x) -> 1, f(x, y) -> 2
@@ -192,6 +210,7 @@ def how_many_variable_in_custom_function(function_str_expression, custom_paramet
         if 'x' <= e <= 'z':
             variable_list.append(custom_parameter[e])
     return variable_list
+
 
 
 def calculate_custom_function(number_list, operator_tuple, custom_function, custom_parameter, graph, func_dict):
@@ -324,14 +343,8 @@ def plot_stack_graph(number_1, number_2, operator, operator_index, func_dict, tm
         graph.append(F'  node_{operator_index_1} -> node_{operator_index};')
         graph.append(F'  node_{operator_index_2} -> node_{operator_index};')
 
+
+
 class BracketDismatchError(Exception): 
     def __init__(self, msg):
         self.msg = F'Expression: \'{msg}\' has dismatched brackets, please check again.'
-
-
-
-if __name__ == '__main__':
-    str_1 = '3*(pow(2, 3)+cos(0))-f(x)'
-    parse_stack = parse_str(str_1)
-    graph = calculate(number_list=parse_stack, str_expression=str_1, custom_function=lambda x:x+1, custom_parameter={'x':1})
-    print(graph)
