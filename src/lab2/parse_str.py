@@ -34,13 +34,10 @@ def input_data_validation(parse_str):
     Decorator, input data control.
     """
     def wrapper(expression):
-        try:
-            if not detection_of_bracket_matches(expression):
-                raise BracketDismatchError(expression)
-            else:
-                return parse_str(expression)
-        except BracketDismatchError as exception:
-            print(exception.msg)
+        if not detection_of_bracket_matches(expression):
+            raise BracketDismatchError(expression)
+        else:
+            return parse_str(expression)
     return wrapper
 
 
@@ -347,4 +344,5 @@ def plot_stack_graph(number_1, number_2, operator, operator_index, func_dict, tm
 
 class BracketDismatchError(Exception): 
     def __init__(self, msg):
-        self.msg = F'Expression: \'{msg}\' has dismatched brackets, please check again.'
+        self.msg = F'BracketDismatchError: \'{msg}\' has dismatched brackets, please check again.'
+        print(self.msg)

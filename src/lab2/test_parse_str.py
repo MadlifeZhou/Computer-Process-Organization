@@ -44,8 +44,8 @@ class TestParseStr(unittest.TestCase):
         str_1 = '3/0'
         str_2 = '1+2)'
         self.assertRaises(ZeroDivisionError, calculate(number_list=parse_str(str_1)))
-        self.assertRaises(BracketDismatchError, parse_str(str_2))
-        
+        with self.assertRaises(BracketDismatchError):
+            parse_str(str_2)
 
     def test_mixed_str(self):
         str_1 = '(4-1)*(pow(2, 3)+sin(0))-f(x)'
