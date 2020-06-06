@@ -139,5 +139,3 @@ class CancelledError(Exception):
     def __init__(self):
         self.msg = 'Future has been cancelled.'
         print(self.msg)
-
-if __name__ == '__main__':
