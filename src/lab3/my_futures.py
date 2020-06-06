@@ -1,16 +1,19 @@
 import threading
-from queue import Queue
+from queue import Queue, PriorityQueue
 import time
 
-def _worker(work_queue):
+def _worker(work_queue, priority=False):
     """
     This function will be executed by every thread.
     In this infinite while loop, every thread get a work_item from the work_queue,
     if get a None type value, it will be blocked itself. Once there is a new work item
     putted into the work_queue, one of the threads will be waken and execute the corresponding function.
     """
+    #with threading.Condition():
+        #if priority: threading.Condition.wait()
     while True:
         work_item = work_queue.get(block=True)
+        print(F'{id(work_item)} has been removed from the queue.\n')
         if work_item is not None:
             work_item.run()
             del work_item
@@ -21,25 +24,29 @@ class ThreadPoolExecutor(object):
     """
     Global worker pool.
     """
-    def __init__(self, max_workers=None):
+    def __init__(self, max_workers=None, priority=False):
         if max_workers is None:
             max_workers = 2
         elif max_workers <= 0:
             raise ValueError('max_workers must be greater than 0')
         
         self._max_workers = max_workers #The maximum number of threads allowed to be created.
-        self._work_queue = Queue() #A queue where stores jobs to be done.
+        self._work_queue = PriorityQueue() #A queue where stores jobs to be done.
         self._threads = set() #Number of the running threads.
+        #self._priority = priority
 
 
     def submit(self, fn, *args, **kwargs):
         f = Future()
         w = _WorkItem(f, fn, args, kwargs)
         self._work_queue.put(w)
-        #print(self._work_queue.qsize())
+        print(F'{id(w)} has been putted into the queue.\n')
         self._start_working()
 
         return f #Return future.
+
+    def submit_with_priority(self, priority=None, *fn, **kwargs):
+        pass
     
 
     def _start_working(self):
@@ -56,11 +63,12 @@ class ThreadPoolExecutor(object):
         self._work_queue.join()
 
 class _WorkItem(object):
-    def __init__(self, future, fn, args, kwargs):
+    def __init__(self, future=None, fn=None, args=None, kwargs=None):
         self.future = future
         self.fn = fn
         self.args = args
         self.kwargs = kwargs
+        #self.priority = priority
 
     def run(self):
         """
@@ -69,6 +77,9 @@ class _WorkItem(object):
         self.future.set_running()
         result = self.fn(*self.args, *self.kwargs)
         self.future.set_result(result)
+
+    def __lt__(self, other):
+        return self.priority <= other.priority
 
 class Future(object):
     def __init__(self):
@@ -125,4 +136,8 @@ class Future(object):
     def set_cancelled(self):
         self._state = 'CANCELLED'
 class CancelledError(Exception):
-    pass
+    def __init__(self):
+        self.msg = 'Future has been cancelled.'
+        print(self.msg)
+
+if __name__ == '__main__':
