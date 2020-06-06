@@ -9,16 +9,16 @@ def _worker(work_queue, priority=False):
     if get a None type value, it will be blocked itself. Once there is a new work item
     putted into the work_queue, one of the threads will be waken and execute the corresponding function.
     """
-    #with threading.Condition():
-        #if priority: threading.Condition.wait()
     while True:
         work_item = work_queue.get(block=True)
-        print(F'{id(work_item)} has been removed from the queue.\n')
+        #print(F'{id(work_item)} has been removed from the queue.\n')
         if work_item is not None:
             work_item.run()
             del work_item
             work_queue.task_done()
             continue
+
+
 
 class ThreadPoolExecutor(object):
     """
@@ -36,18 +36,38 @@ class ThreadPoolExecutor(object):
         #self._priority = priority
 
 
+
     def submit(self, fn, *args, **kwargs):
         f = Future()
-        w = _WorkItem(f, fn, args, kwargs)
+        w = _WorkItem(None, f, fn, args, kwargs)
         self._work_queue.put(w)
-        print(F'{id(w)} has been putted into the queue.\n')
+        #print(F'{id(w)} has been putted into the queue.\n')
         self._start_working()
 
         return f #Return future.
 
-    def submit_with_priority(self, priority=None, *fn, **kwargs):
-        pass
-    
+
+
+    def submit_with_priority(self, fn_dict):
+        """
+        This method recieves a dictionary of functions. Priority can be specified,
+        and the smaller value indicates higher priority.
+        i.e. If I have 2 job(job 1, job 2), and job 2 is queued later than job 1, but
+        I want to get result of job 2 first, so I got to set a higher priority than job 1.
+        As a result, job 2 will be executed before job 1.
+        """
+        fs = []
+        for fn in fn_dict.keys():
+            f = Future()
+            fs.append(f)
+            w = _WorkItem(fn_dict[fn]['priority'], f, fn, fn_dict[fn]['args'])
+            self._work_queue.put(w)
+            #print(F'{id(w)} has been putted into the queue.\n')
+        for thread_num in range(self._max_workers):
+            self._start_working()
+        return fs
+
+
 
     def _start_working(self):
         """
@@ -62,24 +82,30 @@ class ThreadPoolExecutor(object):
     def shutdown(self):
         self._work_queue.join()
 
+
+
 class _WorkItem(object):
-    def __init__(self, future=None, fn=None, args=None, kwargs=None):
+    def __init__(self, priority, future, fn, args, kwargs=None):
         self.future = future
         self.fn = fn
         self.args = args
         self.kwargs = kwargs
-        #self.priority = priority
+        self.priority = priority
 
     def run(self):
         """
         This method is actually running requested function.
         """
         self.future.set_running()
-        result = self.fn(*self.args, *self.kwargs)
+        if self.kwargs is None: result = self.fn(*self.args)
+        else: result = self.fn(*self.args, *self.kwargs)
         self.future.set_result(result)
 
     def __lt__(self, other):
         return self.priority <= other.priority
+
+
+
 
 class Future(object):
     def __init__(self):

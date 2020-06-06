@@ -30,6 +30,20 @@ class TestMyFuture(unittest.TestCase):
         self.assertEqual(f_1.result(), 4)
         self.assertEqual(f_2.result(), 8)
 
+    def test_result_sequence(self):
+        """
+        From this test, job 2 is queue later than job 1, but it get executed
+        before job 1. Because priority has been specified as we want to get job 2
+        result first.
+        """
+        exe = ThreadPoolExecutor(max_workers=1)
+        jobs = {lambda: time.sleep(3): {'priority': 2, 'args': []},
+                lambda: time.sleep(2): {'priority': 1, 'args': []}}
+        fs = exe.submit_with_priority(jobs)
+        time.sleep(1)
+        self.assertEqual(fs[0].running(), False)
+        self.assertEqual(fs[1].running(), True)
+
     def test_exceptions(self):
         #Number of thread should be greater than 0.
         with self.assertRaises(ValueError):
